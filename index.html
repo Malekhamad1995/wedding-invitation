@@ -441,6 +441,8 @@
     if(introEnded) return; introEnded=true;
     try{vid.pause();}catch(e){}
     document.getElementById('intro').classList.add('hide');
+    // إذا ضل على شاشة الظرف 10 ثواني بدون ضغط، تفتح الدعوة تلقائياً
+    setTimeout(function(){ openCard(); }, 11000);
   }
   function tryPlay(){ if(introEnded) return; vid.muted=true; var p=vid.play(); if(p&&p.catch) p.catch(function(){}); }
   vid.addEventListener('ended', endIntro);
