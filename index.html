@@ -464,8 +464,23 @@
       window.scrollTo(0,0);
       document.querySelector('.hero').classList.add('in');
     },1100);
+    setTimeout(startAutoScroll, 2800);
     playMusic();
   }
+
+  // تمرير تلقائي بطيء للكرت، يتوقف بأول تفاعل من المستخدم
+  var autoTimer=null;
+  function startAutoScroll(){
+    stopAutoScroll();
+    autoTimer=setInterval(function(){
+      if(window.innerHeight+window.scrollY >= document.body.scrollHeight-2){ stopAutoScroll(); return; }
+      window.scrollBy(0,1);
+    },40);
+  }
+  function stopAutoScroll(){ if(autoTimer){ clearInterval(autoTimer); autoTimer=null; } }
+  ['wheel','touchstart','pointerdown','keydown'].forEach(function(ev){
+    window.addEventListener(ev, stopAutoScroll, {passive:true});
+  });
 
   var target=new Date('2026-07-23T20:30:00').getTime();
   var ar=function(n){return n.toLocaleString('ar-EG');};
