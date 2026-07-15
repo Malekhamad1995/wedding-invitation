@@ -34,11 +34,12 @@
   textarea{width:100%;min-height:88px;padding:13px 15px;border:1.5px dashed var(--gold);border-radius:12px;
     font-family:monospace;font-size:12.5px;color:var(--ink);background:#fffdf5;resize:vertical;direction:ltr;text-align:left;margin-top:6px}
   .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-  button{flex:1;min-width:130px;border:none;border-radius:50px;padding:14px;font-family:'El Messiri';font-size:15.5px;font-weight:600;
+  button{flex:1;min-width:120px;border:none;border-radius:50px;padding:14px;font-family:'El Messiri';font-size:15.5px;font-weight:600;
     cursor:pointer;transition:transform .2s;color:#fff}
   .copy{background:linear-gradient(180deg,var(--gold-light),var(--gold))}
   .wa{background:linear-gradient(180deg,#5cc78a,#3aa06a)}
   .prev{background:linear-gradient(180deg,#8a6bbf,#6a4a9c)}
+  .short{background:linear-gradient(180deg,#4aa3c9,#2c7fa0)}
   button:hover{transform:translateY(-2px)}
   .done{text-align:center;color:#3aa06a;font-weight:600;margin-top:12px;min-height:22px;font-size:15px}
   .hint{font-family:'Reem Kufi',sans-serif;font-size:12px;color:#a3915f;line-height:1.9;margin-top:16px;
@@ -73,6 +74,7 @@
   </div>
   <div class="row">
     <div class="opt on" id="anim" onclick="tog(this)"><span class="dot"></span> فتح مع الأنميشن (فيديو افتتاحي)</div>
+    <div class="opt on" id="contact" onclick="tog(this)"><span class="dot"></span> إظهار قسم التواصل</div>
   </div>
 
   <label>جهة التواصل (اختياري — لو غير العريس)</label>
@@ -87,19 +89,19 @@
     <button class="copy" onclick="copyLink()">📋 نسخ</button>
     <button class="wa" onclick="shareWa()">💬 واتساب</button>
     <button class="prev" onclick="preview()">👁️ معاينة</button>
+    <button class="short" onclick="shorten()">🔗 اختصار الرابط</button>
   </div>
   <div class="done" id="done"></div>
 
   <p class="hint">
+    • للحصول على شكل رابط أنيق بالواتساب: اضغط "اختصار الرابط" قبل المشاركة — بيصير رابط قصير مع صورة الدعوة.<br>
     • اللقب: اختر من الأزرار أو اكتب لقب مخصّص (المخصّص له الأولوية).<br>
     • بدون "اسم العروسة" يظهر "كريمته" ولا يظهر اسم دانا بأي مكان.<br>
-    • جهة التواصل: لو تركتها فاضية يظهر رقم العريس الافتراضي.<br>
-    • الفراغات والأحرف العربية تُرمّز تلقائياً.
+    • جهة التواصل: لو تركتها فاضية يظهر رقم العريس الافتراضي.
   </p>
 </div>
 
 <script>
-  // رابط الموقع = نفس مجلد هالصفحة (index.html)
   var BASE=location.href.replace(/[^/]*(\?.*)?$/,'')+'index.html';
   var selTitle='السيد';
   document.querySelectorAll('#titleChips .chip').forEach(function(c){
@@ -119,6 +121,7 @@
     if(on('bride')) p.push('bride=true');
     if(on('zaffa')) p.push('zaffa=true');
     if(!on('anim')) p.push('anim=0');
+    if(!on('contact')) p.push('contact=0');
     var cn=val('cname'); if(cn) p.push('cname='+encodeURIComponent(cn));
     var cp=val('cphone'); if(cp) p.push('cphone='+encodeURIComponent(cp));
     var url=BASE+(p.length?'?'+p.join('&'):'');
@@ -131,8 +134,19 @@
       document.getElementById('done').textContent='✓ تم النسخ — الصقه بالواتساب';
     }).catch(function(){ document.execCommand('copy'); document.getElementById('done').textContent='✓ تم النسخ'; });
   }
-  function shareWa(){ window.open('https://api.whatsapp.com/send?text='+encodeURIComponent(build()),'_blank'); }
+  function shareWa(){ window.open('https://api.whatsapp.com/send?text='+encodeURIComponent(document.getElementById('link').value),'_blank'); }
   function preview(){ window.open(build(),'_blank'); }
+  function shorten(){
+    var u=build(); var d=document.getElementById('done'); d.textContent='… جاري اختصار الرابط';
+    fetch('https://is.gd/create.php?format=simple&logstats=0&url='+encodeURIComponent(u))
+      .then(function(r){return r.text();})
+      .then(function(s){
+        s=(s||'').trim();
+        if(s.indexOf('http')===0){ document.getElementById('link').value=s; d.textContent='✓ تم اختصار الرابط — انسخه أو شاركه'; }
+        else { d.textContent='تعذّر الاختصار — الرابط الطويل يعمل تماماً'; }
+      })
+      .catch(function(){ d.textContent='تعذّر الاختصار (تحقّق من الإنترنت) — الرابط الطويل يعمل'; });
+  }
   build();
 </script>
 </body>

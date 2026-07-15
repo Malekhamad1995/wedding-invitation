@@ -15,6 +15,11 @@
 <meta name="twitter:title" content="دعوة زفاف — مالك">
 <meta name="twitter:description" content="يتشرّف آل حمد بدعوتكم لحضور حفل زفاف نجلهم مالك — الخميس ٢٣ تموز ٢٠٢٦، الساعة ٨:٣٠ مساءً، في قاعات قصر الجبل للاحتفالات.">
 <meta name="twitter:image" content="https://malekhamad1995.github.io/wedding-invitation/maar.jpg">
+<meta property="og:url" content="https://malekhamad1995.github.io/wedding-invitation/">
+<meta property="og:site_name" content="دعوة زفاف مالك ودانا">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:alt" content="دعوة زفاف مالك">
+<link rel="image_src" href="https://malekhamad1995.github.io/wedding-invitation/maar.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=Aref+Ruqaa:wght@400;700&family=El+Messiri:wght@400;500;600;700&family=Rakkas&family=Reem+Kufi:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -356,7 +361,7 @@
     <p class="addr">من أمام منزل والد العريس — شارع الأردن، قبل مسجد الرباط، شارع ١٧</p>
   </section>
 
-  <section class="reveal">
+  <section class="reveal" id="contactSec">
     <div class="divider"><span class="line"></span><span class="dot">❖</span><span class="line"></span></div>
     <h3 class="title">للتواصل والاستفسار</h3>
     <p class="detail" style="margin-bottom:4px" id="contactLabel">للتواصل مع العريس</p>
@@ -425,6 +430,9 @@
     }
     if(cnm && cnm.trim()){
       document.getElementById('contactLabel').textContent='للتواصل مع '+cnm.trim();
+    }
+    if(q.get('contact')==='0' || q.get('nocontact')==='1'){
+      var cs=document.getElementById('contactSec'); if(cs) cs.style.display='none';
     }
   })();
 
