@@ -310,7 +310,6 @@
         <circle cx="34" cy="34" r="18"/><circle cx="56" cy="34" r="18"/>
         <path class="fill" d="M34 12 l5 8 h-10 z"/>
       </svg>
-      <span class="couple-and">و</span>
       <span class="shimmer" id="brideName">دانا</span>
     </div>
 
@@ -355,12 +354,12 @@
   <section class="reveal">
     <div class="divider"><span class="line"></span><span class="dot">❖</span><span class="line"></span></div>
     <h3 class="title">للتواصل والاستفسار</h3>
-    <p class="detail" style="margin-bottom:4px">للتواصل مع العريس</p>
+    <p class="detail" style="margin-bottom:4px" id="contactLabel">للتواصل مع العريس</p>
     <div class="contact-btns">
-      <a class="btn-gold" href="tel:0790098542">📞 اتصال</a>
-      <a class="btn-wa" href="https://wa.me/962790098542" target="_blank" rel="noopener">💬 واتساب</a>
+      <a class="btn-gold" id="contactTel" href="tel:0790098542">📞 اتصال</a>
+      <a class="btn-wa" id="contactWa" href="https://wa.me/962790098542" target="_blank" rel="noopener">💬 واتساب</a>
     </div>
-    <p class="phone">0790098542</p>
+    <p class="phone" id="contactPhone">0790098542</p>
   </section>
 
   <footer class="reveal">
@@ -391,10 +390,15 @@
     }
     var nm=q.get('guest');
     if(nm && nm.trim()){
-      var sx=(q.get('g')||q.get('gender')||q.get('sex')||'').trim().toLowerCase();
+      var custom=q.get('title');
       var title='';
-      if(['m','male','ذكر','رجل','ولد','السيد'].indexOf(sx)>=0) title='السيد ';
-      else if(['f','female','انثى','أنثى','بنت','امرأة','سيدة','السيدة','انسة','الآنسة'].indexOf(sx)>=0) title='السيدة ';
+      if(custom && custom.trim()){
+        title=custom.trim()+' ';
+      } else {
+        var sx=(q.get('g')||q.get('gender')||q.get('sex')||'').trim().toLowerCase();
+        if(['m','male','ذكر','رجل','ولد','السيد'].indexOf(sx)>=0) title='السيد ';
+        else if(['f','female','انثى','أنثى','بنت','امرأة','سيدة','السيدة','انسة','الآنسة'].indexOf(sx)>=0) title='السيدة ';
+      }
       var full=title+nm.trim();
       document.getElementById('guestName').textContent=full;
       document.getElementById('guestLine').style.display='inline-block';
@@ -403,6 +407,19 @@
     }
     if(on(q.get('zaffa'))){
       document.getElementById('zaffaSec').style.display='';
+    }
+
+    // جهة تواصل مخصّصة (اسم/رقم غير العريس)
+    var cph=q.get('cphone'), cnm=q.get('cname');
+    if(cph && cph.trim()){
+      var ph=cph.trim();
+      document.getElementById('contactPhone').textContent=ph;
+      document.getElementById('contactTel').href='tel:'+ph.replace(/\s+/g,'');
+      var d=ph.replace(/\D/g,''); if(d.charAt(0)==='0') d='962'+d.slice(1);
+      document.getElementById('contactWa').href='https://wa.me/'+d;
+    }
+    if(cnm && cnm.trim()){
+      document.getElementById('contactLabel').textContent='للتواصل مع '+cnm.trim();
     }
   })();
 
@@ -481,6 +498,9 @@
     for(var i=0;i<40;i++){var p=new P();p.x=W/2;p.y=H/2;p.sp=-2+Math.random()*5;p.sw=3;p.o=.9;parts.push(p);}
     setTimeout(function(){parts.splice(44);},2500);
   }
+
+  // وضع بدون أنميشن: ?anim=0 → دخول مباشر للكرت بدون فيديو/ظرف
+  if((new URLSearchParams(location.search)).get('anim')==='0'){ endIntro(); openCard(); }
 </script>
 </body>
 </html>

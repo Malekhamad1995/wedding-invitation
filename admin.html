@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex,nofollow">
+<title>لوحة إنشاء الدعوات</title>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@400;700&family=El+Messiri:wght@400;500;600;700&family=Reem+Kufi:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--gold:#b8963f;--gold-light:#cdb06a;--gold-deep:#9c7c2f;--ink:#5f5127;--maroon:#7d2a3b;--paper:#fffdf8;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{background:linear-gradient(180deg,#fffdf8,#f4ecda);color:var(--ink);font-family:'El Messiri',sans-serif;
+    min-height:100vh;padding:24px 14px;display:flex;justify-content:center}
+  .card{background:var(--paper);border:2px solid var(--gold-light);border-radius:22px;max-width:560px;width:100%;
+    padding:24px 20px 28px;box-shadow:0 14px 40px rgba(156,124,47,.18)}
+  h1{font-family:'Aref Ruqaa',serif;color:var(--maroon);text-align:center;font-size:25px;margin-bottom:4px}
+  .sub{text-align:center;color:var(--gold-deep);font-family:'Reem Kufi',sans-serif;font-size:13.5px;margin-bottom:20px}
+  label{display:block;font-family:'Reem Kufi',sans-serif;font-size:14px;color:var(--gold-deep);margin:16px 0 7px}
+  input[type=text]{width:100%;padding:13px 15px;border:1.5px solid var(--gold-light);border-radius:12px;
+    font-family:'El Messiri';font-size:16px;color:var(--ink);background:#fffef9;text-align:right}
+  input[type=text]:focus{outline:none;border-color:var(--gold);box-shadow:0 0 0 3px rgba(184,150,63,.15)}
+  .chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+  .chip{background:#fffef9;border:1.5px solid var(--gold-light);border-radius:50px;padding:9px 16px;cursor:pointer;
+    font-size:15px;transition:.2s;user-select:none}
+  .chip.on{border-color:var(--maroon);background:#fff6f2;color:var(--maroon);font-weight:600}
+  .row{display:flex;gap:10px;flex-wrap:wrap;margin-top:7px}
+  .opt{flex:1;min-width:150px;display:flex;align-items:center;gap:10px;background:#fffef9;border:1.5px solid var(--gold-light);
+    border-radius:12px;padding:12px 14px;cursor:pointer;font-size:15px;transition:.2s;user-select:none}
+  .opt.on{border-color:var(--maroon);background:#fff6f2;color:var(--maroon);font-weight:600;box-shadow:0 4px 14px rgba(125,42,59,.12)}
+  .opt .dot{width:18px;height:18px;border-radius:50%;border:2px solid var(--gold);flex:none}
+  .opt.on .dot{background:var(--maroon);border-color:var(--maroon);box-shadow:inset 0 0 0 3px #fff}
+  .two{display:flex;gap:10px;flex-wrap:wrap}
+  .two>div{flex:1;min-width:180px}
+  textarea{width:100%;min-height:88px;padding:13px 15px;border:1.5px dashed var(--gold);border-radius:12px;
+    font-family:monospace;font-size:12.5px;color:var(--ink);background:#fffdf5;resize:vertical;direction:ltr;text-align:left;margin-top:6px}
+  .btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+  button{flex:1;min-width:130px;border:none;border-radius:50px;padding:14px;font-family:'El Messiri';font-size:15.5px;font-weight:600;
+    cursor:pointer;transition:transform .2s;color:#fff}
+  .copy{background:linear-gradient(180deg,var(--gold-light),var(--gold))}
+  .wa{background:linear-gradient(180deg,#5cc78a,#3aa06a)}
+  .prev{background:linear-gradient(180deg,#8a6bbf,#6a4a9c)}
+  button:hover{transform:translateY(-2px)}
+  .done{text-align:center;color:#3aa06a;font-weight:600;margin-top:12px;min-height:22px;font-size:15px}
+  .hint{font-family:'Reem Kufi',sans-serif;font-size:12px;color:#a3915f;line-height:1.9;margin-top:16px;
+    border-top:1px dashed var(--gold-light);padding-top:12px}
+</style>
+</head>
+<body>
+<div class="card">
+  <h1>لوحة إنشاء الدعوات</h1>
+  <p class="sub">اكتب البيانات واختر الخيارات — الرابط بيتولّد جاهز للمشاركة</p>
+
+  <label>اسم المدعو الكامل</label>
+  <input type="text" id="name" placeholder="مثال: أحمد فالح الفلاني" oninput="build()">
+
+  <label>اللقب</label>
+  <div class="chips" id="titleChips">
+    <div class="chip on" data-t="السيد">السيد</div>
+    <div class="chip" data-t="السيدة">السيدة</div>
+    <div class="chip" data-t="الآنسة">الآنسة</div>
+    <div class="chip" data-t="الدكتور">الدكتور</div>
+    <div class="chip" data-t="الدكتورة">الدكتورة</div>
+    <div class="chip" data-t="الأستاذ">الأستاذ</div>
+    <div class="chip" data-t="عائلة">عائلة</div>
+    <div class="chip" data-t="">بدون لقب</div>
+  </div>
+  <input type="text" id="ctitle" placeholder="أو اكتب لقب مخصّص (مثلاً: أم أحمد / المهندس)" oninput="build()" style="margin-top:8px">
+
+  <label>خيارات الدعوة</label>
+  <div class="row">
+    <div class="opt" id="bride" onclick="tog(this)"><span class="dot"></span> إظهار اسم العروسة (دانا)</div>
+    <div class="opt on" id="zaffa" onclick="tog(this)"><span class="dot"></span> إظهار زفّة العريس</div>
+  </div>
+  <div class="row">
+    <div class="opt on" id="anim" onclick="tog(this)"><span class="dot"></span> فتح مع الأنميشن (فيديو افتتاحي)</div>
+  </div>
+
+  <label>جهة التواصل (اختياري — لو غير العريس)</label>
+  <div class="two">
+    <div><input type="text" id="cname" placeholder="اسم للتواصل (مثلاً: أبو أحمد)" oninput="build()"></div>
+    <div><input type="text" id="cphone" placeholder="رقم الهاتف (مثلاً: 0791234567)" oninput="build()"></div>
+  </div>
+
+  <label>الرابط الجاهز</label>
+  <textarea id="link" readonly onclick="this.select()"></textarea>
+  <div class="btns">
+    <button class="copy" onclick="copyLink()">📋 نسخ</button>
+    <button class="wa" onclick="shareWa()">💬 واتساب</button>
+    <button class="prev" onclick="preview()">👁️ معاينة</button>
+  </div>
+  <div class="done" id="done"></div>
+
+  <p class="hint">
+    • اللقب: اختر من الأزرار أو اكتب لقب مخصّص (المخصّص له الأولوية).<br>
+    • بدون "اسم العروسة" يظهر "كريمته" ولا يظهر اسم دانا بأي مكان.<br>
+    • جهة التواصل: لو تركتها فاضية يظهر رقم العريس الافتراضي.<br>
+    • الفراغات والأحرف العربية تُرمّز تلقائياً.
+  </p>
+</div>
+
+<script>
+  // رابط الموقع = نفس مجلد هالصفحة (index.html)
+  var BASE=location.href.replace(/[^/]*(\?.*)?$/,'')+'index.html';
+  var selTitle='السيد';
+  document.querySelectorAll('#titleChips .chip').forEach(function(c){
+    c.onclick=function(){
+      document.querySelectorAll('#titleChips .chip').forEach(function(x){x.classList.remove('on');});
+      c.classList.add('on'); selTitle=c.getAttribute('data-t'); build();
+    };
+  });
+  function tog(el){el.classList.toggle('on');build();}
+  function on(id){return document.getElementById(id).classList.contains('on');}
+  function val(id){return document.getElementById(id).value.trim();}
+  function effTitle(){ var c=val('ctitle'); return c?c:selTitle; }
+  function build(){
+    var p=[];
+    var name=val('name'); if(name) p.push('guest='+encodeURIComponent(name));
+    var t=effTitle(); if(t) p.push('title='+encodeURIComponent(t));
+    if(on('bride')) p.push('bride=true');
+    if(on('zaffa')) p.push('zaffa=true');
+    if(!on('anim')) p.push('anim=0');
+    var cn=val('cname'); if(cn) p.push('cname='+encodeURIComponent(cn));
+    var cp=val('cphone'); if(cp) p.push('cphone='+encodeURIComponent(cp));
+    var url=BASE+(p.length?'?'+p.join('&'):'');
+    document.getElementById('link').value=url;
+    return url;
+  }
+  function copyLink(){
+    var t=document.getElementById('link'); t.select();
+    navigator.clipboard.writeText(t.value).then(function(){
+      document.getElementById('done').textContent='✓ تم النسخ — الصقه بالواتساب';
+    }).catch(function(){ document.execCommand('copy'); document.getElementById('done').textContent='✓ تم النسخ'; });
+  }
+  function shareWa(){ window.open('https://api.whatsapp.com/send?text='+encodeURIComponent(build()),'_blank'); }
+  function preview(){ window.open(build(),'_blank'); }
+  build();
+</script>
+</body>
+</html>
