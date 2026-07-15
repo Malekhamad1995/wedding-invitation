@@ -442,7 +442,7 @@
     try{vid.pause();}catch(e){}
     document.getElementById('intro').classList.add('hide');
     // إذا ضل على شاشة الظرف 10 ثواني بدون ضغط، تفتح الدعوة تلقائياً
-    setTimeout(function(){ openCard(); }, 11000);
+    setTimeout(function(){ openCard(); }, 10000);
   }
   function tryPlay(){ if(introEnded) return; vid.muted=true; var p=vid.play(); if(p&&p.catch) p.catch(function(){}); }
   vid.addEventListener('ended', endIntro);
@@ -480,6 +480,12 @@
 
   var audio=document.getElementById('audio');
   function playMusic(){ var p=audio.play(); if(p&&p.catch) p.catch(function(){}); }
+  // تشغيل الموسيقى عند أول تفاعل (مفيد لو فُتحت الدعوة تلقائياً بدون ضغط)
+  var musicUnlocked=false;
+  function unlockMusic(){ if(musicUnlocked) return; musicUnlocked=true; playMusic(); }
+  ['pointerdown','touchstart','click','keydown','scroll'].forEach(function(ev){
+    document.addEventListener(ev, unlockMusic, {passive:true});
+  });
 
   var obs=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting)x.target.classList.add('in');});},{threshold:.15});
   document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
